@@ -1,12 +1,25 @@
 #!/usr/bin/env python3
 import numpy as np
 
+
 def ReLU(X: np.ndarray) -> np.ndarray:
     return np.maximum(0, X)
 
+
+def Sigmoid(X: np.ndarray) -> np.ndarray:
+    return 1 / (1 + np.exp(X))
+
+
 class Capa:
-    def __init__(self, entradas: np.ndarray, neuronas: int,
-                 activacion, feedforward, backpropagation, bias: bool = True) -> None:
+    def __init__(
+        self,
+        entradas: np.ndarray,
+        neuronas: int,
+        activacion,
+        feedforward,
+        backpropagation,
+        bias: bool = True,
+    ) -> None:
         self.neuronas = neuronas
         self.activacion = activacion
         self.bias = bias
@@ -31,15 +44,24 @@ class Capa:
 def genRandX(rows: int, cols: int) -> np.ndarray:
     return np.random.randn(rows, cols)
 
+
 def main():
     X = genRandX(2, 3)
     # X = np.array([[1,2,3],[4,5,6]])
-    capa = Capa(entradas=X, neuronas=1, activacion=ReLU,
-                feedforward=None, backpropagation=None, bias=False)
+    capa = Capa(
+        entradas=X,
+        neuronas=1,
+        activacion=Sigmoid,
+        feedforward=None,
+        backpropagation=None,
+        bias=False,
+    )
 
     print("X=", X, end="\n\n")
     print("W=", capa.getPesos(), end="\n\n")
+    print("Y=", X @ capa.getPesos(), end="\n\n")
     print("Z=", capa.getResult(), end="\n\n")
+
 
 if __name__ == "__main__":
     main()
