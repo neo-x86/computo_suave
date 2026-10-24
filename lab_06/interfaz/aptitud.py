@@ -30,3 +30,24 @@ class AptitudReinas(Aptitud):
         for cromosoma in poblacion:
             # f(x) = 28 - C(x)
             cromosoma.score = max_pares - contar_conflictos(cromosoma.genes())
+
+
+def calcular_cargas(
+    asignacion: List[int], tiempos: List[int], n_procesadores: int
+) -> List[int]:
+    """Tiempo total de cada procesador. asignacion[tarea] = procesador (1..n)."""
+    cargas = [0] * n_procesadores
+    for tarea, proc in enumerate(asignacion):
+        cargas[proc - 1] += tiempos[tarea]
+    return cargas
+
+
+class AptitudProcesadores(Aptitud):
+    """f(x) = 1 / (1 + M(x)), con M(x) = máximo tiempo de carga entre procesadores."""
+
+    def evaluar_poblacion(self, poblacion: List[CromosomaOctal], var: Dict):
+        tiempos = var["tiempos"]
+        n_proc = var["n_procesadores"]
+        for cromosoma in poblacion:
+            M = max(calcular_cargas(cromosoma.genes(), tiempos, n_proc))
+            cromosoma.score = 1.0 / (1.0 + M)

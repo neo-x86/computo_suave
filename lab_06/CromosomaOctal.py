@@ -11,10 +11,13 @@ class CromosomaOctal:
         self.score: int = -1
         self.gen_width: int = 3  # bits por gen
         self.bits: int = 0
+        self.min_value: int = 0
         self.max_value: int = 2**self.gen_width - 1  # 7
         self.mascaras: Dict = {}
         # El gen 1 queda en los bits más significativos (dígito más a la izquierda)
-        for g, i in enumerate(reversed(range(0, genes * self.gen_width, self.gen_width))):
+        for g, i in enumerate(
+            reversed(range(0, genes * self.gen_width, self.gen_width))
+        ):
             self.mascaras["p" + str(g + 1)] = i
             self.mascaras["m" + str(g + 1)] = self.max_value << i
 
@@ -23,7 +26,9 @@ class CromosomaOctal:
             self.set_bits(random.randint(0, self.max_value), i + 1)
 
     def get_bits(self, gen: int) -> int:
-        return (self.bits & self.mascaras["m" + str(gen)]) >> self.mascaras["p" + str(gen)]
+        return (self.bits & self.mascaras["m" + str(gen)]) >> self.mascaras[
+            "p" + str(gen)
+        ]
 
     def set_bits(self, valor: int, gen: int) -> None:
         self.bits = (self.bits & ~self.mascaras["m" + str(gen)]) | (

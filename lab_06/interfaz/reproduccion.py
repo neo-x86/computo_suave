@@ -1,3 +1,4 @@
+import copy
 import random
 from abc import ABC, abstractmethod
 from typing import List
@@ -23,8 +24,9 @@ class ReproduccionUnCruce(Reproduccion):
 
     def reproduccion_poblacion(self, poblacion, potencial, max_poblacion) -> None:
         while len(poblacion) < max_poblacion:
-            hijoA = CromosomaOctal(self.num_genes)
-            hijoB = CromosomaOctal(self.num_genes)
+            # copy.copy conserva el tipo de cromosoma (octal, decimal, ...) y su rango
+            hijoA = copy.copy(potencial[0])
+            hijoB = copy.copy(potencial[0])
             padreA, padreB = random.sample(potencial, 2)
             punto_cruce = random.randint(1, self.num_genes - 1)
             # Se recorren TODOS los genes (1..n_genes inclusive)
